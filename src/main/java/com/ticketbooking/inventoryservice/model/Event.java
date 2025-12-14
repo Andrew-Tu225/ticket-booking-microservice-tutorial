@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Data
-@Table(name="events")
+@Table(name="event")
 public class Event {
     @Id
     private Long id;
@@ -25,6 +25,6 @@ public class Event {
     @JoinColumn(name = "venue_id")
     private Venue venue;
 
-    @Column(name = "ticket_price")
-    private BigDecimal ticketPrice;
+    //@Column(name = "ticket_price")
+    //private BigDecimal ticketPrice;
 }
