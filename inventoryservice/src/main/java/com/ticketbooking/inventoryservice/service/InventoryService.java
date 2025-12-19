@@ -32,6 +32,7 @@ public class InventoryService {
                 .event(event.getName())
                 .capacity(event.getLeftCapacity())
                 .venue(event.getVenue())
+                .ticketPrice(event.getTicketPrice())
                 .build()).collect(Collectors.toList());
     }
 
@@ -55,6 +56,17 @@ public class InventoryService {
                 .venue(event.getVenue())
                 .ticketPrice(event.getTicketPrice())
                 .build();
+    }
+
+    public void updateEventCapacity(Long eventId, Long ticketBooked){
+        Event event = eventRepository.findById(eventId).orElse(null);
+        if (event != null) {
+            event.setLeftCapacity(event.getLeftCapacity() - ticketBooked);
+            eventRepository.saveAndFlush(event);
+        }
+        else{
+            throw new RuntimeException("Event not found");
+        }
     }
 
 }
