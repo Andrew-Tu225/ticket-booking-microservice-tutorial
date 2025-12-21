@@ -33,3 +33,4 @@ build/
 .vscode/
 inventoryservice/.idea
 inventoryservice/.env
+inventoryservice/volume-data/
