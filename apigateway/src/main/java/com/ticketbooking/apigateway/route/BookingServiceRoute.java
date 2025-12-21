@@ -1,7 +1,8 @@
 package com.ticketbooking.apigateway.route;
 
-import org.springframework.boot.micrometer.observation.autoconfigure.ObservationProperties;
+import org.springframework.cloud.gateway.server.mvc.filter.BeforeFilterFunctions;
 import org.springframework.cloud.gateway.server.mvc.filter.CircuitBreakerFilterFunctions;
+import org.springframework.cloud.gateway.server.mvc.filter.FilterFunctions;
 import org.springframework.cloud.gateway.server.mvc.handler.GatewayRouterFunctions;
 import org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions;
 import org.springframework.context.annotation.Bean;
@@ -35,6 +36,16 @@ public class BookingServiceRoute {
                         request ->
                         ServerResponse.status(HttpStatus.SERVICE_UNAVAILABLE)
                                 .body("booking service is down"))
+                .build();
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> bookingServiceApiDocs() {
+        return GatewayRouterFunctions.route("booking-service-api-doc")
+                .route(RequestPredicates.path("/docs/bookingservice/v3/api-docs"),
+                        HandlerFunctions.http())
+                .filter(FilterFunctions.setPath("/v3/api-docs"))
+                .before(BeforeFilterFunctions.uri("http://localhost:8081"))
                 .build();
     }
 }

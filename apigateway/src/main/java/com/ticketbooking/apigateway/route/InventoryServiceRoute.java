@@ -1,6 +1,9 @@
 package com.ticketbooking.apigateway.route;
 
+import org.springframework.cloud.gateway.server.mvc.filter.BeforeFilterFunctions;
+import org.springframework.cloud.gateway.server.mvc.filter.FilterFunctions;
 import org.springframework.cloud.gateway.server.mvc.handler.GatewayRouterFunctions;
+import org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
@@ -39,5 +42,15 @@ public class InventoryServiceRoute {
                 .body(String.class);
 
         return ServerResponse.ok().body(responseBody);
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> inventoryServiceApiDocs() {
+        return GatewayRouterFunctions.route("inventory-service-api-doc")
+                .route(RequestPredicates.path("/docs/inventoryservice/v3/api-docs"),
+                        HandlerFunctions.http())
+                .filter(FilterFunctions.setPath("/v3/api-docs"))
+                .before(BeforeFilterFunctions.uri("http://localhost:8080"))
+                .build();
     }
 }
